@@ -5,7 +5,7 @@
       <li v-for="hotel in hotels" :key="hotel.id">
         {{ `Hotel: ${hotel.name}` }}
         <v-btn depressed elevation="2" @click="hotelDetails(hotel.id)">
-          Book
+          Details
         </v-btn>
       </li>
     </ul>
@@ -41,15 +41,27 @@ export default {
       this.show = true;
     },
     async getHotelDetails(id) {
-      const response = await this.axios.get(`${baseApiUrl}/hotels/${id}/info`);
+      const response = await this.axios.get(`${baseApiUrl}/hotels/${id}/info`, {
+        headers: {
+          Authorization: `Token ${localStorage.authToken}`,
+        },
+      });
       return response.data;
     },
     async getAllHotels() {
       try {
-        const response = await this.axios.get(`${baseApiUrl}/hotels`);
+        const response = await this.axios.get(`${baseApiUrl}/hotels`, {
+          headers: {
+            Authorization: `Token ${localStorage.authToken}`,
+          },
+        });
         this.hotels = response.data;
       } catch (e) {
-        console.error(e);
+        this.$toasted.show("Could not get hotels !!", {
+          theme: "bubble",
+          position: "top-right",
+          duration: 2000,
+        });
       }
     },
   },

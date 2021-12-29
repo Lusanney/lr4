@@ -1,18 +1,16 @@
 <template>
   <v-dialog v-model="show" width="500">
-    <v-card>
+    <v-card v-if="hotelDetails">
       <v-card-title class="text-h5 grey lighten-2">
         Hotel Details for
-        {{ hotelDetails ? hotelDetails.Hotel.name : "" }}
+        {{ hotelDetails.Hotel.name }}
       </v-card-title>
 
       <v-container>
-        <v-card-text>
-          Address: {{ hotelDetails ? hotelDetails.Hotel.address : "" }}
-        </v-card-text>
+        <v-card-text> Address: {{ hotelDetails.Hotel.address }} </v-card-text>
 
         <v-card-text>
-          description: {{ hotelDetails ? hotelDetails.Hotel.description : "" }}
+          description: {{ hotelDetails.Hotel.description }}
         </v-card-text>
 
         <div class="mt-5">

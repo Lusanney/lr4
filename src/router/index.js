@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "/home",
     name: "Home",
     component: Home,
   },
@@ -32,7 +32,7 @@ const routes = [
   },
   {
     path: "/me/changepassword",
-    name: "SignUp",
+    name: "ChangePassword",
     component: () => import("../views/auth/ChangePassword.vue"),
   },
   {
@@ -48,4 +48,16 @@ const router = new VueRouter({
   routes,
 });
 
+const publicRoutes = ["SignIn", "SignUp"];
+router.beforeEach((to, from, next) => {
+  if (!publicRoutes.includes(to.name) && !localStorage.authToken) {
+    next({ name: "SignIn" });
+  } else if (publicRoutes.includes(to.name) && localStorage.authToken) {
+    next({
+      name: "Home",
+    });
+  } else {
+    next();
+  }
+});
 export default router;

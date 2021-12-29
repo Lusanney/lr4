@@ -54,8 +54,22 @@ export default {
 
         localStorage.meId = meResponse.data.id;
 
+        this.$store.commit("setAuthToken", localStorage.authToken);
+        this.$router.push({
+          name: "Home",
+        });
+
+        this.$toasted.show("Logged in !!", {
+          theme: "toasted-primary",
+          position: "top-right",
+          duration: 2000,
+        });
       } catch (e) {
-        console.error(e);
+        this.$toasted.show("Could not sign in !!", {
+          theme: "bubble",
+          position: "top-right",
+          duration: 2000,
+        });
       }
     },
   },

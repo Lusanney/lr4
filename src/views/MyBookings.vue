@@ -45,14 +45,24 @@ export default {
     },
     async getMyBookings() {
       const response = await this.axios.get(
-        `${baseApiUrl}/visitors/${localStorage.meId}/bookings`
+        `${baseApiUrl}/visitors/${localStorage.meId}/bookings`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.authToken}`,
+          },
+        }
       );
 
       this.bookings = response.data;
     },
     async getBookingReport(id) {
       const response = await this.axios.get(
-        `${baseApiUrl}/bookings/${id}/report`
+        `${baseApiUrl}/bookings/${id}/report`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.authToken}`,
+          },
+        }
       );
 
       return response.data;

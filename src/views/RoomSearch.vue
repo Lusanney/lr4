@@ -37,10 +37,18 @@ export default {
     },
     async getAllRooms() {
       try {
-        const response = await this.axios.get(`${baseApiUrl}/rooms`);
+        const response = await this.axios.get(`${baseApiUrl}/rooms`, {
+          headers: {
+            Authorization: `Token ${localStorage.authToken}`,
+          },
+        });
         this.rooms = response.data;
       } catch (e) {
-        console.error(e);
+        this.$toasted.show("Could not get all rooms !!", {
+          theme: "bubble",
+          position: "top-right",
+          duration: 2000,
+        });
       }
     },
     async bookRoom(id) {

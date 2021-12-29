@@ -2,7 +2,7 @@
   <v-dialog v-model="show" width="500">
     <v-card>
       <v-card-title class="text-h5 grey lighten-2">
-        Booking Details for booking code
+        Booking Code:
         {{ booking ? booking.Booking.booking_code : "" }}
       </v-card-title>
 

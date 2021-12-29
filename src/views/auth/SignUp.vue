@@ -30,14 +30,6 @@
         required
       ></v-text-field>
 
-      <v-select
-        v-model="select"
-        :items="roles"
-        label="Select"
-        data-vv-name="select"
-        required
-      ></v-select>
-
       <v-btn color="success" class="mr-4" @click="submit"> Submit </v-btn>
     </v-form>
   </v-container>
@@ -59,16 +51,13 @@ export default {
     rules: {
       required: (value) => !!value || "Required.",
     },
-    select: null,
-    roles: ["Visitors", "Hosts"],
   }),
   methods: {
     async submit() {
       try {
-        await this.axios.post(
-          `${baseApiUrl}/api/${this.select.toLowerCase()}/create`,
-          { ...this.auth }
-        );
+        await this.axios.post(`${baseApiUrl}/api/visitors/create`, {
+          ...this.auth,
+        });
 
         const signInResponse = await this.axios.post(
           `${baseApiUrl}/auth/token/login`,
@@ -85,8 +74,23 @@ export default {
         });
 
         localStorage.meId = meResponse.data.id;
+
+        this.$store.commit("setAuthToken", localStorage.authToken);
+        this.$router.push({
+          name: "Home",
+        });
+
+        this.$toasted.show("Sgined up !!", {
+          theme: "toasted-primary",
+          position: "top-right",
+          duration: 2000,
+        });
       } catch (e) {
-        console.error(e);
+        this.$toasted.show("Could not sign up !!", {
+          theme: "bubble",
+          position: "top-right",
+          duration: 2000,
+        });
       }
     },
   },

@@ -120,7 +120,11 @@ export default {
         console.log(response.data);
         this.$emit("onShowChanged", false);
       } catch (e) {
-        console.error(e);
+        this.$toasted.show("Could not create booking !!", {
+          theme: "bubble",
+          position: "top-right",
+          duration: 2000,
+        });
       }
     },
   },
