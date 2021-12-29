@@ -3,13 +3,16 @@
     <v-container>
       <h1>My bookings</h1>
 
+      <!-- My Bookings container -->
       <div class="d-flex flex-row flex-wrap">
+        <!-- Multiple Card in here -->
         <v-card
           class="my-4 mx-4"
           width="344"
           v-for="booking in bookings"
           :key="booking.id"
         >
+          <!-- Card body -->
           <v-card-text>
             <div><v-icon> mdi-ticket </v-icon> Booking</div>
             <p class="text-h4 text--primary">{{ booking.booking_code }}</p>
@@ -25,6 +28,8 @@
               <b>{{ booking.room.hotel.name }}</b>
             </div>
           </v-card-text>
+
+          <!-- Card footer -->
           <v-card-actions>
             <v-btn
               text
@@ -38,6 +43,7 @@
       </div>
     </v-container>
 
+    <!-- Pop up dialog. Component con từ thư mục /components  -->
     <BookingDetailsDialog
       :show="show"
       @onShowChanged="onShowChanged"
@@ -53,48 +59,87 @@ const baseApiUrl = "http://localhost:8000/api";
 export default {
   name: "Home",
   components: {
-    BookingDetailsDialog,
+    BookingDetailsDialog, // Component được sử dụng, từ thư mục /components
   },
+  // All states
   data: () => ({
-    bookings: [],
-    show: false,
-    bookingReport: null,
+    bookings: [], // Tất cả các hotels gọi từ API
+    show: false, // Dùng để mở pop up. False là không mở, True là mở
+    bookingReport: null, // Booking được chọn (sau khi nhấn nút Details)
   }),
   methods: {
+    /**
+     * Vì mình sẽ bật / tắt pop up trong component con HotelDetailsDialog.
+     * Cho nên function này sẽ được đưa cho HotelDetailsDialog, để nó tắt tuỳ ý
+     */
     onShowChanged(value) {
+      // khi component con tắt popup (false). Chúng ta sẽ tắt cái state này đi.
       this.show = value;
     },
+
+    /**
+     * Function này được chạy khi nhấn nút details
+     */
     async showBookingDetails(id) {
-      const bookingReport = await this.getBookingReport(id);
-      this.show = true;
-      this.bookingReport = bookingReport;
+      try {
+        // Gọi API để lấy thông tin booking
+        const response = await this.axios.get(
+          `${baseApiUrl}/bookings/${id}/report`,
+          {
+            // API đi kèm mã xác thực
+            headers: {
+              Authorization: `Token ${localStorage.authToken}`,
+            },
+          }
+        );
+
+        // gán State, sau đó mở popup dialog, để truyền data
+        const bookingReport = response.data;
+        this.show = true;
+        this.bookingReport = bookingReport;
+      } catch (e) {
+        // chạy toast (pop up nhỏ) khi không gọi api được
+        this.$toasted.show("Could not get booking details !!", {
+          theme: "bubble",
+          position: "top-right",
+          duration: 2000,
+        });
+      }
     },
+
+    /**
+     * Function này chỉ đơn giản là gọi API và trả về kết quả các bookings của người dùng
+     * có trong DB. Chúng ta sẽ chạy function này mỗi khi trang được load.
+     *
+     * -> Lấy hết bookings của người dùng hiện tại, khi trang được load
+     */
     async getMyBookings() {
-      const response = await this.axios.get(
-        `${baseApiUrl}/visitors/${localStorage.meId}/bookings`,
-        {
-          headers: {
-            Authorization: `Token ${localStorage.authToken}`,
-          },
-        }
-      );
+      try {
+        // gọi API để lấy các bookings của hành khách
+        const response = await this.axios.get(
+          `${baseApiUrl}/visitors/${localStorage.meId}/bookings`,
+          {
+            // API đi kèm mã xác thực
+            headers: {
+              Authorization: `Token ${localStorage.authToken}`,
+            },
+          }
+        );
 
-      this.bookings = response.data;
-    },
-    async getBookingReport(id) {
-      const response = await this.axios.get(
-        `${baseApiUrl}/bookings/${id}/report`,
-        {
-          headers: {
-            Authorization: `Token ${localStorage.authToken}`,
-          },
-        }
-      );
-
-      return response.data;
+        // gán State
+        this.bookings = response.data;
+      } catch (e) {
+        // chạy toast (pop up nhỏ) khi không gọi api được
+        this.$toasted.show("Could not get bookings !!", {
+          theme: "bubble",
+          position: "top-right",
+          duration: 2000,
+        });
+      }
     },
   },
   created() {
+    // -> Lấy hết bookings khi trang được load
     this.getMyBookings();
   },
 };

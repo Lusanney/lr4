@@ -1,12 +1,16 @@
 <template>
+  <!-- Dialog sẽ được mở khi giá trị 'show' == true -->
   <v-dialog v-model="show" width="500">
+    <!-- Card bên trong -->
     <v-card v-if="booking">
+      <!-- Card title -->
       <v-card-title class="text-h5 grey lighten-2">
         Booking Code:
         {{ booking.Booking.booking_code }}
       </v-card-title>
 
       <v-container>
+        <!-- Card về thông tin thời gian -->
         <v-card color="#385F73" dark>
           <v-card-text>
             <v-icon class="mx-3"> mdi-calendar</v-icon>
@@ -19,6 +23,7 @@
         <div class="mt-5">
           <strong>Bills</strong>
           <div v-if="booking">
+            <!-- Các cards về Bills -->
             <v-card
               v-for="bill in booking.Booking.bills"
               :key="bill.id"
@@ -36,6 +41,7 @@
 
         <div class="mt-3">
           <strong>Report</strong>
+          <!-- Card về thông tin report -->
           <v-card color="#385F73" dark>
             <v-card-text>
               <strong>Total Pay: </strong> ${{ booking.Report.total_price }}
@@ -53,9 +59,17 @@
 <script>
 export default {
   name: "BookingDetails",
-  props: ["booking", "show"],
+
+  //Giá trị Component cha cần truyền vào
+  props: [
+    "booking", // Object booking -> thông tin về booking
+    "show", // Show -> có nên mở pop up (true) hay tắt (false)
+  ],
   methods: {},
+
+  // Theo dõi sự thay đổi của state
   watch: {
+    // Nếu 'show' thay đổi, báo cho lớp cha biết rằng 'show' đã tắt.
     show: function (value) {
       this.$emit("onShowChanged", value);
     },

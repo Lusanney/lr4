@@ -1,7 +1,10 @@
 <template>
+  <!-- Dialog sẽ được mở khi giá trị 'show' == true -->
   <v-dialog v-model="show" width="500">
+    <!-- Card bên trong -->
     <v-card v-if="hotelDetails">
       <v-container>
+        <!-- Card về thông tin khách sạn Hotel -->
         <v-card color="#385F73" dark>
           <v-card-title class="text-h5">
             {{ hotelDetails.Hotel.name }}
@@ -19,6 +22,7 @@
           <strong>Owner Contact</strong>
 
           <div v-if="hotelDetails">
+            <!-- Card về thông tin Chủ khách sạn (Owner) -->
             <v-card color="#385F73" dark class="px-5 py-5">
               <p>
                 <v-icon> mdi-pen</v-icon>
@@ -47,15 +51,16 @@
 
         <div class="mt-3">
           <strong>Extra info</strong>
+          <!-- Card về thông tin bên lề -->
           <v-card color="#385F73" dark>
             <v-card-text>
-             <strong>Total Rooms: </strong> {{ hotelDetails.Hotel.address }}
+              <strong>Total Rooms: </strong> {{ hotelDetails.Hotel.address }}
             </v-card-text>
             <v-card-text>
-             <strong>Min Price: </strong> {{ hotelDetails.Info.min_price }}
+              <strong>Min Price: </strong> {{ hotelDetails.Info.min_price }}
             </v-card-text>
             <v-card-text>
-             <strong>Max Price: </strong> {{ hotelDetails.Info.max_price }}
+              <strong>Max Price: </strong> {{ hotelDetails.Info.max_price }}
             </v-card-text>
           </v-card>
         </div>
@@ -67,9 +72,16 @@
 <script>
 export default {
   name: "HotelDetails",
-  props: ["hotelDetails", "show"],
+  //Giá trị Component cha cần truyền vào
+  props: [
+    "hotelDetails", // Object hotel -> thông tin về hotel
+    "show", // Show -> có nên mở pop up (true) hay tắt (false)
+  ],
   methods: {},
+  
+  // Theo dõi sự thay đổi của state
   watch: {
+    // Nếu 'show' thay đổi, báo cho lớp cha biết rằng 'show' đã tắt.
     show: function (value) {
       this.$emit("onShowChanged", value);
     },
