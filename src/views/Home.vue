@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <h1>Hello world</h1>
+    <v-container>
+      <h1>This is a client application for demoing backend api interfaces </h1>
+    </v-container>
   </div>
 </template>
 

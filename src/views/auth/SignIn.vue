@@ -1,5 +1,6 @@
 <template>
-  <v-container>
+  <v-card class="px-5 py-5 mx-auto mt-5" width="400">
+    <v-card-title>Sign In</v-card-title>
     <v-form ref="form" lazy-validation>
       <v-text-field
         v-model="auth.username"
@@ -18,8 +19,13 @@
         @click:append="show = !show"
       ></v-text-field>
       <v-btn color="success" class="mr-4" @click="submit"> Submit </v-btn>
+
+      <v-btn :to="'/signup'" class="mr-4" color="primary">
+        <v-icon left dark> mdi-key</v-icon>
+        Sign Up
+      </v-btn>
     </v-form>
-  </v-container>
+  </v-card>
 </template>
 
 <script>

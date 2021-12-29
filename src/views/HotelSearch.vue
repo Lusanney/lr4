@@ -1,19 +1,48 @@
 <template>
   <div class="about">
-    <h1>This is an hotel search page</h1>
-    <ul>
-      <li v-for="hotel in hotels" :key="hotel.id">
-        {{ `Hotel: ${hotel.name}` }}
-        <v-btn depressed elevation="2" @click="hotelDetails(hotel.id)">
-          Details
-        </v-btn>
-      </li>
-    </ul>
-    <HotelDetailsDialog
-      :show="show"
-      @onShowChanged="onShowChanged"
-      :hotelDetails="selectedHotelDetails"
-    />
+    <v-container>
+      <h1>Hotels</h1>
+      <div class="d-flex flex-row flex-wrap">
+        <v-card
+          max-width="344"
+          outlined
+          class="mx-4 my-4"
+          v-for="hotel in hotels"
+          :key="hotel.id"
+        >
+          <v-list-item three-line>
+            <v-list-item-content>
+              <div class="text-overline mb-4">
+                <v-icon> mdi-domain</v-icon> HOTEL
+              </div>
+              <v-list-item-title class="text-h5 mb-1">
+                {{ hotel.name }}
+              </v-list-item-title>
+              <v-list-item-subtitle>{{
+                hotel.description
+              }}</v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-list-item-avatar
+              tile
+              size="80"
+              color="grey"
+            ></v-list-item-avatar>
+          </v-list-item>
+
+          <v-card-actions>
+            <v-btn outlined rounded text @click="hotelDetails(hotel.id)">
+              Details
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <HotelDetailsDialog
+        :show="show"
+        @onShowChanged="onShowChanged"
+        :hotelDetails="selectedHotelDetails"
+      />
+    </v-container>
   </div>
 </template>
 

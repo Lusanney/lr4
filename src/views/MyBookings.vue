@@ -1,16 +1,42 @@
 <template>
   <div class="home">
-    <h1>Hello my booking page</h1>
+    <v-container>
+      <h1>My bookings</h1>
 
-    <ul>
-      <li v-for="booking in bookings" :key="booking.id">
-        {{ `Booking code: ${booking.booking_code}` }}
+      <div class="d-flex flex-row flex-wrap">
+        <v-card
+          class="my-4 mx-4"
+          width="344"
+          v-for="booking in bookings"
+          :key="booking.id"
+        >
+          <v-card-text>
+            <div><v-icon> mdi-ticket </v-icon> Booking</div>
+            <p class="text-h4 text--primary">{{ booking.booking_code }}</p>
+            <p>
+              <v-icon class="mx-2"> mdi-calendar </v-icon
+              >{{ booking.date_checkin }} -
+              <v-icon class="mx-2"> mdi-calendar </v-icon
+              >{{ booking.date_checkout }}
+            </p>
 
-        <v-btn depressed elevation="2" @click="showBookingDetails(booking.id)">
-          Details
-        </v-btn>
-      </li>
-    </ul>
+            <div class="text--primary">
+              Room: <b>{{ booking.room.number }}</b> of Hotel:
+              <b>{{ booking.room.hotel.name }}</b>
+            </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              text
+              color="deep-purple accent-4"
+              @click="showBookingDetails(booking.id)"
+            >
+              Details
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+    </v-container>
 
     <BookingDetailsDialog
       :show="show"

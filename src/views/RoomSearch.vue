@@ -1,18 +1,52 @@
 <template>
   <div class="about">
-    <h1>This is an Room search page</h1>
-    <ul>
-      <li v-for="room in rooms" :key="room.id">
-        {{ `Room: ${room.number} - Hotel: ${room.hotel.name}` }}
-        <v-btn depressed elevation="2" @click="bookRoom(room.id)"> Book </v-btn>
-      </li>
-    </ul>
+    <v-container>
+      <h1>Room Page</h1>
+      <div class="d-flex flex-row flex-wrap">
+        <v-card
+          elevation="6"
+          width="400"
+          class="my-4 mx-4"
+          shaped
+          v-for="room in rooms"
+          :key="room.id"
+        >
+          <v-card-title>
+            Room {{ room.number }} of Hotel: {{ room.hotel.name }}
+          </v-card-title>
 
-    <BookingFormDialog
-      :show="show"
-      @onShowChanged="onShowChanged"
-      :room="selectedRoom"
-    />
+          <v-card-subtitle>
+            <v-icon> mdi-pin</v-icon>
+            {{ room.hotel.address }}
+          </v-card-subtitle>
+
+          <v-card-text>
+            {{ room.hotel.description }}
+          </v-card-text>
+
+          <v-divider> </v-divider>
+          <v-card-actions>
+            <v-card-text>
+              <b class="subtitle-1">${{ room.price }} </b> / night
+            </v-card-text>
+            <v-btn
+              class="mx-4"
+              depressed
+              elevation="2"
+              @click="bookRoom(room.id)"
+            >
+              Book
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+
+      <BookingFormDialog
+        :show="show"
+        @onShowChanged="onShowChanged"
+        :room="selectedRoom"
+      />
+    </v-container>
   </div>
 </template>
 
